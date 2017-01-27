@@ -1,15 +1,8 @@
 #!/bin/bash
 
-openvas-nvt-sync
-
-/etc/init.d/openvas-manager stop
-/etc/init.d/openvas-scanner stop
-
 openvas-mkcert-client -n -i
 
-openvassd
-openvasmd --rebuild --progress
-
+openvas-nvt-sync
 openvas-scapdata-sync
 openvas-certdata-sync
 
