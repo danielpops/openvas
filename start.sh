@@ -9,7 +9,9 @@ echo "Starting Openvas..."
 echo "Starting gsad"
 gsad --http-only
 
+echo "Starting openvas-scanner..."
 openvassd
+echo "Starting openvas-manager"
 openvasmd
 
 echo "This may take a minute or two..."
