@@ -1,10 +1,9 @@
 #FROM ubuntu:xenial
 FROM ubuntu:trusty
 MAINTAINER danielpops@gmail.com
-ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         alien \
         autoconf \
         bison \
@@ -51,9 +50,8 @@ RUN apt-get update \
         vim \
         wget \
         xmltoman \
-        xsltproc
-#       xsltproc \
-#    && apt-get clean
+        xsltproc \
+    && apt-get clean
 
 WORKDIR /openvas
 
@@ -71,7 +69,11 @@ RUN for i in openvas-libraries-8.0.8,2351 openvas-scanner-5.0.7,2367 openvas-man
         rm -rf $1.tar.gz; \
         done
 
+# Configure redis to use a unixsocket in the location that openvas is expecting
 RUN echo "unixsocket /tmp/redis.sock" >> /etc/redis/redis.conf
+
+# Set port to zero to disable redis listening on TCP
+RUN echo "port 0" >> /etc/redis/redis.conf
 
 # Create a cert, for use in internal communication between Openvas components
 RUN openvas-mkcert
