@@ -34,6 +34,7 @@ RUN apt-get update \
         libxslt-dev \
         nmap \
         nsis \
+        openssh-client \
         openssl \
         perl-base \
         pkg-config \
