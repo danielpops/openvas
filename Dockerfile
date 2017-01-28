@@ -62,7 +62,6 @@ RUN for i in openvas-libraries-8.0.8,2351 openvas-scanner-5.0.7,2367 openvas-man
         tar xfvz $1.tar.gz; \
         cd $1; \
         cmake .; \
-        make; \
         make install; \
         cd ..; \
         rm -rf $1; \
