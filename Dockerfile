@@ -69,16 +69,9 @@ RUN for i in openvas-libraries-8.0.8,2351 openvas-scanner-5.0.7,2367 openvas-man
         rm -rf $1.tar.gz; \
         done
 
-# Configure redis to use a unixsocket in the location that openvas is expecting
-RUN echo "unixsocket /tmp/redis.sock" >> /etc/redis/redis.conf
-
-# Set port to zero to disable redis listening on TCP
-RUN echo "port 0" >> /etc/redis/redis.conf
-
-# Create a cert, for use in internal communication between Openvas components
-RUN openvas-mkcert
-
 RUN ldconfig
+
+ADD redis.conf /etc/redis/redis.conf
 ADD setup.sh setup.sh
 RUN chmod +x setup.sh
 ADD start.sh start.sh
