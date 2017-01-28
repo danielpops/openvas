@@ -32,7 +32,6 @@ RUN apt-get update \
         libssh-dev \
         libxml2-dev \
         libxslt-dev \
-        nmap \
         nsis \
         openssh-client \
         openssl \
@@ -53,6 +52,19 @@ RUN apt-get update \
         xmltoman \
         xsltproc \
     && apt-get clean
+
+
+# Install nmap from source
+# Openvas recommends an ancient version
+ENV NMAP_VERSION=nmap-5.51
+WORKDIR /nmap/
+RUN curl -O https://nmap.org/dist/$NMAP_VERSION.tar.bz2 \
+    && bzip2 -cd $NMAP_VERSION.tar.bz2 | tar xvf - \
+    && cd /nmap/$NMAP_VERSION/ \
+    && ./configure --prefix=/ \
+    && make \
+    && make install \
+    && rm -rf /nmap/
 
 WORKDIR /openvas
 
