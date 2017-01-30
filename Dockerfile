@@ -1,4 +1,3 @@
-#FROM ubuntu:xenial
 FROM ubuntu:trusty
 MAINTAINER danielpops@gmail.com
 

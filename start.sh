@@ -6,7 +6,7 @@ service redis-server restart
 
 echo "Starting Openvas..."
 
-echo "Starting gsad"
+echo "Starting gsad..."
 gsad --http-only
 
 echo "Starting openvas-scanner..."
