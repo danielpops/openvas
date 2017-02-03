@@ -39,6 +39,8 @@ RUN apt-get update \
         python-lxml \
         python-pip \
         redis-server \
+        ruby \
+        ruby-dev \
         rpm \
         rsync \
         sqlfairy \
@@ -52,18 +54,7 @@ RUN apt-get update \
         xsltproc \
     && apt-get clean
 
-
-# Install nmap from source
-# Openvas recommends an ancient version
-ENV NMAP_VERSION=nmap-5.51
-WORKDIR /nmap/
-RUN curl -O https://nmap.org/dist/$NMAP_VERSION.tar.bz2 \
-    && bzip2 -cd $NMAP_VERSION.tar.bz2 | tar xvf - \
-    && cd /nmap/$NMAP_VERSION/ \
-    && ./configure --prefix=/ \
-    && make \
-    && make install \
-    && rm -rf /nmap/
+RUN gem install fpm
 
 WORKDIR /openvas
 
@@ -75,19 +66,27 @@ RUN for i in openvas-libraries-8.0.8,2351 openvas-scanner-5.0.7,2367 openvas-man
         cd $1; \
         cmake .; \
         make install; \
+        make DESTDIR=/tmp/openvas install; \
         cd ..; \
         rm -rf $1; \
         rm -rf $1.tar.gz; \
         done
 
 RUN ldconfig
+RUN fpm -s dir -t deb \
+        --force \
+        --name openvas \
+        --depends "libglib2.0-0, libgpgme11, libksba8, libmicrohttpd10, libpcap0.8, libsnmp30, libssh-4, libldap-2.4-2, libxml2, libxslt1.1, libhiredis0.10, nsis, openssh-client, openssl, redis-server, rpm, rsync, sqlite3, wget" \
+        --description "Openvas vulnerability scanner" \
+        -C /tmp/openvas \
+        --package /openvas
 
-ADD redis.conf /etc/redis/redis.conf
-ADD setup.sh setup.sh
-RUN chmod +x setup.sh
-ADD start.sh start.sh
-RUN chmod +x start.sh
-
-RUN ./setup.sh
-
-ENTRYPOINT ["/openvas/start.sh"]
+#ADD redis.conf /etc/redis/redis.conf
+#ADD setup.sh setup.sh
+#RUN chmod +x setup.sh
+#ADD start.sh start.sh
+#RUN chmod +x start.sh
+#
+#RUN ./setup.sh
+#
+#ENTRYPOINT ["/openvas/start.sh"]
