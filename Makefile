@@ -5,7 +5,7 @@ TAG=${whoami}-openvas
 all:
 	echo >&2 "Must specify target."
 
-whoami    := $(shell whoami)
+whoami    := $(shell who | awk '{print $$1}')
 
 test:
 	true
