@@ -2,7 +2,7 @@ services:
   - docker
 
 install:
-  - docker build -t danielpops/openvas .
+  - docker build -t danielpops/openvas . > /dev/null
   - docker run --rm -p 80:80 --name openvas
   - docker push danielpops/openvas
 
