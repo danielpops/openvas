@@ -1,7 +1,7 @@
 FROM ubuntu:trusty
 MAINTAINER danielpops@gmail.com
 
-RUN apt-get update \
+RUN apt-get update > /dev/null \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         alien \
         autoconf \
@@ -50,6 +50,7 @@ RUN apt-get update \
         wget \
         xmltoman \
         xsltproc \
+            > /dev/null \
     && apt-get clean
 
 
@@ -60,8 +61,8 @@ WORKDIR /nmap/
 RUN curl -O https://nmap.org/dist/$NMAP_VERSION.tar.bz2 \
     && bzip2 -cd $NMAP_VERSION.tar.bz2 | tar xvf - \
     && cd /nmap/$NMAP_VERSION/ \
-    && ./configure --prefix=/ \
-    && make \
+    && ./configure --prefix=/ > /dev/null \
+    && make > /dev/null \
     && make install \
     && rm -rf /nmap/
 
