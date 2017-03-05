@@ -1,7 +1,5 @@
 services:
   - docker
 
-install:
-  - travis_wait 60 docker build -t danielpops/openvas:$TRAVIS_COMMIT . > /dev/null
-  - docker push danielpops/openvas:$TRAVIS_COMMIT
+install: travis_wait 60 ./build_and_push_to_docker_registry.sh
 
