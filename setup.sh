@@ -1,9 +1,9 @@
 #!/bin/bash
 
-openvas-mkcert -q
-openvas-mkcert-client -n -i
+openvas-mkcert -q > /dev/null
+openvas-mkcert-client -n -i > /dev/null
 
-openvas-nvt-sync
+openvas-nvt-sync > /dev/null
 openvas-scapdata-sync
 openvas-certdata-sync
 

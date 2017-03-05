@@ -3,5 +3,5 @@ set -ev
 
 TAG="danielpops/openvas:$TRAVIS_COMMIT"
 
-docker build -t ${TAG} . > /dev/null
+docker build -t ${TAG} .
 docker push ${TAG}
