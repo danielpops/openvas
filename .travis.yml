@@ -2,7 +2,6 @@ services:
   - docker
 
 install:
-  - docker build -t danielpops/openvas . > /dev/null
-  - docker run --rm -p 80:80 --name openvas
-  - docker push danielpops/openvas
+  - travis_wait 60 docker build -t danielpops/openvas:$TRAVIS_COMMIT . > /dev/null
+  - docker push danielpops/openvas:$TRAVIS_COMMIT
 
