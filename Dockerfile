@@ -56,7 +56,7 @@ RUN apt-get update > /dev/null \
 
 # Install nmap from source
 # Openvas recommends an ancient version
-ENV NMAP_VERSION=nmap-5.51
+ENV NMAP_VERSION=nmap-7.60
 WORKDIR /nmap/
 RUN curl -O https://nmap.org/dist/$NMAP_VERSION.tar.bz2 \
     && bzip2 -cd $NMAP_VERSION.tar.bz2 | tar xvf - \
@@ -68,7 +68,7 @@ RUN curl -O https://nmap.org/dist/$NMAP_VERSION.tar.bz2 \
 
 WORKDIR /openvas
 
-RUN for i in openvas-libraries-8.0.8,2351 openvas-scanner-5.0.7,2367 openvas-manager-6.0.9,2359 greenbone-security-assistant-6.0.11,2363 openvas-cli-1.4.5,2397; do \
+RUN for i in openvas-libraries-8.0.9,2433 openvas-scanner-5.0.8,2436 openvas-manager-6.0.11,2445 greenbone-security-assistant-6.0.12,2442 openvas-cli-1.4.5,2397; do \
         IFS=","; \
         set -- $i; \
         wget http://wald.intevation.org/frs/download.php/$2/$1.tar.gz; \
