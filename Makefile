@@ -19,7 +19,13 @@ docker_run:
 docker_exec:
 	docker exec -it $(TAG) /bin/bash
 
+docker_login:
+	docker login -u "$(DOCKER_USERNAME)" -p "$(DOCKER_PASSWORD)"
+
+docker_push: docker_login docker_build
+	docker push $(TAG)
+
 docker_stop:
 	docker stop $(TAG) && docker rm -f $(TAG)
 
-.PHONY: all test docker_build docker_run docker_exec docker_stop
+.PHONY: all test docker_build docker_run docker_exec docker_stop docker_login docker_push
