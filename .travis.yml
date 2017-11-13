@@ -1,5 +1,5 @@
 services:
   - docker
 
-install: travis_wait 30 ./build_and_push_to_docker_registry.sh
+install: ./build_and_push_to_docker_registry.sh
 
