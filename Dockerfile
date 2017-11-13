@@ -61,7 +61,7 @@ RUN apt-get update > /dev/null \
 ENV NMAP_VERSION=nmap-7.60
 WORKDIR /nmap/
 RUN curl -O https://nmap.org/dist/$NMAP_VERSION.tar.bz2 \
-    && bzip2 -cd $NMAP_VERSION.tar.bz2 | tar xvf - \
+    && bzip2 -cd $NMAP_VERSION.tar.bz2 | tar xvf - > /dev/null \
     && cd /nmap/$NMAP_VERSION/ \
     && ./configure --prefix=/ > /dev/null \
     && make > /dev/null \
