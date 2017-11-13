@@ -74,10 +74,10 @@ RUN for i in openvas-libraries-9.0.1,2420 openvas-scanner-5.1.1,2423 openvas-man
         IFS=","; \
         set -- $i; \
         wget http://wald.intevation.org/frs/download.php/$2/$1.tar.gz; \
-        tar xfvz $1.tar.gz; \
+        tar xfvz $1.tar.gz > /dev/null; \
         cd $1; \
-        cmake .; \
-        make install; \
+        cmake . > /dev/null; \
+        make install > /dev/null; \
         cd ..; \
         rm -rf $1; \
         rm -rf $1.tar.gz; \
@@ -89,7 +89,8 @@ ADD redis.conf /etc/redis/redis.conf
 ADD setup.sh setup.sh
 RUN chmod +x setup.sh
 
-RUN ./setup.sh
+# Takes very long
+RUN ./setup.sh > /dev/null
 
 ADD start.sh start.sh
 RUN chmod +x start.sh
