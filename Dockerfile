@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 MAINTAINER danielpops@gmail.com
 
 RUN apt-get update > /dev/null \
@@ -15,6 +15,7 @@ RUN apt-get update > /dev/null \
         gcc \
         gcc-mingw-w64 \
         git \
+        gnutls-bin \
         heimdal-dev \
         heimdal-multidev \
         libglib2.0-dev \
@@ -45,6 +46,7 @@ RUN apt-get update > /dev/null \
         sqlite3 \
         tcl \
         texlive-latex-extra \
+        texlive-fonts-recommended \
         uuid-dev \
         vim \
         wget \
@@ -68,7 +70,7 @@ RUN curl -O https://nmap.org/dist/$NMAP_VERSION.tar.bz2 \
 
 WORKDIR /openvas
 
-RUN for i in openvas-libraries-8.0.9,2433 openvas-scanner-5.0.8,2436 openvas-manager-6.0.11,2445 greenbone-security-assistant-6.0.12,2442 openvas-cli-1.4.5,2397; do \
+RUN for i in openvas-libraries-9.0.1,2420 openvas-scanner-5.1.1,2423 openvas-manager-7.0.2,2448 greenbone-security-assistant-7.0.2,2429 openvas-cli-1.4.5,2397; do \
         IFS=","; \
         set -- $i; \
         wget http://wald.intevation.org/frs/download.php/$2/$1.tar.gz; \
@@ -86,9 +88,10 @@ RUN ldconfig
 ADD redis.conf /etc/redis/redis.conf
 ADD setup.sh setup.sh
 RUN chmod +x setup.sh
-ADD start.sh start.sh
-RUN chmod +x start.sh
 
 RUN ./setup.sh
+
+ADD start.sh start.sh
+RUN chmod +x start.sh
 
 ENTRYPOINT ["/openvas/start.sh"]

@@ -1,11 +1,10 @@
 #!/bin/bash
 
-openvas-mkcert -q > /dev/null
-openvas-mkcert-client -n -i > /dev/null
+openvas-manage-certs -a -i -f
 
-openvas-nvt-sync > /dev/null
-openvas-scapdata-sync
-openvas-certdata-sync
+greenbone-nvt-sync
+greenbone-scapdata-sync
+greenbone-certdata-sync
 
 
 echo "Setting Admin user password..."
