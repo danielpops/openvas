@@ -2,7 +2,7 @@
 
 openvas-manage-certs -a -i -f
 
-greenbone-nvt-sync
+greenbone-nvt-sync > /dev/null
 greenbone-scapdata-sync
 greenbone-certdata-sync
 

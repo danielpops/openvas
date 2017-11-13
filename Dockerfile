@@ -90,7 +90,7 @@ ADD setup.sh setup.sh
 RUN chmod +x setup.sh
 
 # Takes very long
-RUN ./setup.sh > /dev/null
+RUN ./setup.sh
 
 ADD start.sh start.sh
 RUN chmod +x start.sh
