@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-TAG=${whoami}-openvas
+TAG=danielpops/openvas:${whoami}
 
 all:
 	echo >&2 "Must specify target."
