@@ -1,5 +1,11 @@
+language: python
+python:
+    - 2.7
 services:
-- docker
-install: ./build.sh
-script: true
-after_success: ./push_to_docker_registry.sh
+    - docker
+install:
+    - true
+script:
+    - ./build.sh
+after_success:
+    - ./push_to_docker_registry.sh
