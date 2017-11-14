@@ -1,4 +1,5 @@
 services:
 - docker
 install: ./build.sh
+script: true
 after_success: ./push_to_docker_registry.sh
