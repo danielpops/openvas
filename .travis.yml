@@ -1,3 +1,4 @@
 services:
 - docker
-install: ./build_and_push_to_docker_registry.sh
+install: ./build.sh
+after_success: ./push_to_docker_registry.sh
