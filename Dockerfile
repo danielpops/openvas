@@ -15,7 +15,6 @@ RUN apt-get update > /dev/null \
         libldap2-dev \
         libgcrypt20-dev \
         libglib2.0-dev \
-        libgnutls28-dev \
         libgpgme-dev \
         libhiredis-dev \
         libksba-dev \
@@ -51,7 +50,7 @@ WORKDIR /openvas
 RUN curl -L -O https://ftp.gnu.org/gnu/nettle/nettle-3.6.tar.gz; \
         tar xfvz ./nettle-3.6.tar.gz; \
         cd ./nettle-3.6; \
-        ./configure; \
+        ./configure --prefix=/usr --disable-static; \
         make; \
         make check; \
         make install; \
@@ -59,16 +58,16 @@ RUN curl -L -O https://ftp.gnu.org/gnu/nettle/nettle-3.6.tar.gz; \
         rm -rf ./nettle-3.6;
 # Install gnutls 3.6.15
 RUN curl -L -O https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.15.tar.xz; \
-        tar xfvz ./gnutls-3.6.15; \
+        tar -xf ./gnutls-3.6.15.tar.xz; \
         cd ./gnutls-3.6.15; \
-        ./configure; \
+        ./configure --prefix=/usr --disable-guile --with-included-unistring; \
         make; \
         make check; \
         make install; \
         cd ..; \
         rm -rf ./gnutls-3.6.15;
 
-RUN for i in gvm-libs gvmd gsa openvas; do \
+RUN for i in gvm-libs gvmd openvas gsa; do \
         git clone https://github.com/greenbone/$i --depth=1; \
         cd $i; \
         sed -i 's/^.*GNUTLS_TLS1_3:.*$//g' /openvas/openvas/misc/network.c 2>&1 > /dev/null || true; \
