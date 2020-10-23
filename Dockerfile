@@ -28,6 +28,8 @@ RUN apt-get update > /dev/null \
         make \
         nmap \
         pkg-config \
+        postgresql \
+        postgresql-contrib \
         postgresql-server-dev-all \
         redis-server \
         rsync \
