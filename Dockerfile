@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 MAINTAINER danielpops@gmail.com
 
 RUN apt-get update > /dev/null \
