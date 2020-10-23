@@ -54,6 +54,7 @@ RUN for i in gvm-libs gvmd openvas gsa; do \
         make install; \
         cd ..; \
         rm -rf $i; \
+        ldconfig; \
     done
 
 
@@ -62,4 +63,4 @@ RUN echo 'nobody ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/01-nobody && \
         chown -R nobody /usr/local/var/
 ADD redis.conf /etc/redis/redis.conf
 USER nobody
-RUN greenbone-nvt-sync
+#RUN greenbone-nvt-sync
