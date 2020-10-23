@@ -34,6 +34,7 @@ RUN apt-get update > /dev/null \
         sudo \
         uuid-dev \
         vim \
+        xml-twig-tools \
         xmltoman \
         xsltproc
 
@@ -45,9 +46,28 @@ RUN apt-get update > /dev/null \
         nodejs \
         yarn
 
-RUN apt-get install -y xml-twig-tools
-
 WORKDIR /openvas
+# Install nettle 3.6
+RUN curl -L -O https://ftp.gnu.org/gnu/nettle/nettle-3.6.tar.gz; \
+        tar xfvz ./nettle-3.6.tar.gz; \
+        cd ./nettle-3.6; \
+        ./configure; \
+        make; \
+        make check; \
+        make install; \
+        cd ..; \
+        rm -rf ./nettle-3.6;
+# Install gnutls 3.6.15
+RUN curl -L -O https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.15.tar.xz; \
+        tar xfvz ./gnutls-3.6.15; \
+        cd ./gnutls-3.6.15; \
+        ./configure; \
+        make; \
+        make check; \
+        make install; \
+        cd ..; \
+        rm -rf ./gnutls-3.6.15;
+
 RUN for i in gvm-libs gvmd gsa openvas; do \
         git clone https://github.com/greenbone/$i --depth=1; \
         cd $i; \
