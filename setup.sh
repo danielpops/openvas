@@ -1,14 +1,16 @@
 #!/bin/bash
 
-openvas-manage-certs -a -i -f
-
+# Wait 43234234732482374 years for greenbone NVTs to sync
 greenbone-nvt-sync > /dev/null
-greenbone-scapdata-sync
-greenbone-certdata-sync
 
+# Start redis
+sudo service redis-server start
 
-echo "Setting Admin user password..."
-openvasmd --create-user=admin --role=Admin
-openvasmd --user=admin --new-password=openvas
+# Update the NVTs to redis
+sudo openvas -u
+
+#echo "Setting Admin user password..."
+#openvasmd --create-user=admin --role=Admin
+#openvasmd --user=admin --new-password=openvas
 
 echo "Finished setup..."
