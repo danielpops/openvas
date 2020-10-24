@@ -1,98 +1,68 @@
-FROM ubuntu:xenial
+FROM ubuntu:focal
 MAINTAINER danielpops@gmail.com
 
 RUN apt-get update > /dev/null \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        alien \
-        autoconf \
         bison \
-        clang \
         cmake \
         curl \
         doxygen \
-        flex \
         g++ \
         gcc \
-        gcc-mingw-w64 \
-        git \
+        git-core \
         gnutls-bin \
-        heimdal-dev \
-        heimdal-multidev \
+        graphviz \
+        libical-dev \
+        libldap2-dev \
+        libgcrypt20-dev \
         libglib2.0-dev \
-        libgnutls-dev \
-        libgpgme11-dev \
+        libgpgme-dev \
         libhiredis-dev \
         libksba-dev \
-        libldap2-dev \
         libmicrohttpd-dev \
         libpcap-dev \
-        libpopt-dev \
+        libpq-dev \
         libsnmp-dev \
-        libsqlite3-dev \
-        libssh-dev \
+        libssh-gcrypt-dev \
         libxml2-dev \
-        libxslt-dev \
-        nsis \
-        openssh-client \
-        openssl \
-        perl-base \
+        make \
+        nmap \
         pkg-config \
-        python-lxml \
-        python-pip \
+        postgresql \
+        postgresql-contrib \
+        postgresql-server-dev-all \
         redis-server \
-        rpm \
         rsync \
-        sqlfairy \
-        sqlite3 \
-        tcl \
-        texlive-latex-extra \
-        texlive-fonts-recommended \
+        sudo \
         uuid-dev \
         vim \
-        wget \
+        xml-twig-tools \
         xmltoman \
-        xsltproc \
-            > /dev/null \
-    && apt-get clean
+        xsltproc
 
-
-# Install nmap from source
-# Openvas recommends an ancient version
-ENV NMAP_VERSION=nmap-7.60
-WORKDIR /nmap/
-RUN curl -O https://nmap.org/dist/$NMAP_VERSION.tar.bz2 \
-    && bzip2 -cd $NMAP_VERSION.tar.bz2 | tar xvf - > /dev/null \
-    && cd /nmap/$NMAP_VERSION/ \
-    && ./configure --prefix=/ > /dev/null \
-    && make > /dev/null \
-    && make install \
-    && rm -rf /nmap/
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update > /dev/null \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        nodejs \
+        yarn
 
 WORKDIR /openvas
-
-RUN for i in openvas-libraries-9.0.1,2420 openvas-scanner-5.1.1,2423 openvas-manager-7.0.2,2448 greenbone-security-assistant-7.0.2,2429 openvas-cli-1.4.5,2397; do \
-        IFS=","; \
-        set -- $i; \
-        wget http://wald.intevation.org/frs/download.php/$2/$1.tar.gz; \
-        tar xfvz $1.tar.gz > /dev/null; \
-        cd $1; \
-        cmake . > /dev/null; \
-        make install > /dev/null; \
+RUN for i in gvm-libs gvmd openvas gsa; do \
+        git clone https://github.com/greenbone/$i --depth=1; \
+        cd $i; \
+        cmake .; \
+        make install; \
         cd ..; \
-        rm -rf $1; \
-        rm -rf $1.tar.gz; \
-        done
+        rm -rf $i; \
+        ldconfig; \
+    done
 
-RUN ldconfig
 
+RUN echo 'nobody ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/01-nobody && \
+        chown -R nobody /openvas && \
+        chown -R nobody /usr/local/var/
 ADD redis.conf /etc/redis/redis.conf
-ADD setup.sh setup.sh
-RUN chmod +x setup.sh
-
-# Takes very long
-RUN ./setup.sh
-
-ADD start.sh start.sh
-RUN chmod +x start.sh
-
-ENTRYPOINT ["/openvas/start.sh"]
+USER nobody
+#RUN greenbone-nvt-sync
