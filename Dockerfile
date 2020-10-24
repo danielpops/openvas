@@ -27,6 +27,7 @@ RUN apt-get update > /dev/null \
         libxml2-dev \
         make \
         nmap \
+        nodejs \
         pkg-config \
         postgresql \
         postgresql-contrib \
@@ -38,15 +39,11 @@ RUN apt-get update > /dev/null \
         vim \
         xml-twig-tools \
         xmltoman \
-        xsltproc
+        xsltproc \
+        yarnpkg
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get update > /dev/null \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        nodejs \
-        yarn
+# yarn for some reason is installed as yarnpkg and not yarn
+RUN ln -s /usr/bin/yarnpkg /usr/bin/yarn
 
 WORKDIR /openvas
 RUN for i in gvm-libs gvmd openvas gsa; do \
@@ -64,5 +61,6 @@ RUN echo 'nobody ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/01-nobody && \
         chown -R nobody /openvas && \
         chown -R nobody /usr/local/var/
 ADD redis.conf /etc/redis/redis.conf
+ADD setup.sh /openvas/setup.sh
 USER nobody
-#RUN greenbone-nvt-sync
+
