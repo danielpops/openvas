@@ -61,5 +61,6 @@ RUN echo 'nobody ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/01-nobody && \
         chown -R nobody /openvas && \
         chown -R nobody /usr/local/var/
 ADD redis.conf /etc/redis/redis.conf
+ADD setup.sh /openvas/setup.sh
 USER nobody
-#RUN greenbone-nvt-sync
+
