@@ -1,34 +1,32 @@
 SHELL := /bin/bash
 
-NAME   := danielpops/openvas
-TAG    := $$(git log -1 --pretty=%H)
-IMG    := ${NAME}:${TAG}
-LATEST := ${NAME}:latest
-
-HOST   := $(shell echo ${NAME} | sed -e 's/\//-/g')
+TAG?=danielpops/openvas
+NAME:= $(shell echo ${TAG} | sed -e 's/\//-/g')
 
 all:
 	echo >&2 "Must specify target."
+
+whoami    := $(shell who | awk '{print $$1}')
 
 test:
 	true
 
 docker_build:
-	docker build --rm -t ${IMG} .
+	docker build --rm -t $(TAG) .
 
 docker_run:
-	docker run -it --rm -h ${HOST} -p 80 --entrypoint /bin/bash --name ${HOST} ${NAME}
+	docker run -it --rm -h docker-$(NAME) -p 80 --entrypoint /bin/bash --name $(NAME) $(TAG)
 
 docker_exec:
-	docker exec -it ${NAME} /bin/bash
+	docker exec -it $(NAME) /bin/bash
 
 docker_login:
-	docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+	docker login -u "$(DOCKER_USERNAME)" -p "$(DOCKER_PASSWORD)"
 
 docker_push: docker_login docker_build
-	docker push ${NAME}
+	docker push $(TAG)
 
 docker_stop:
-	docker stop ${HOST} && docker rm -f ${HOST}
+	docker stop $(NAME) && docker rm -f $(NAME)
 
 .PHONY: all test docker_build docker_run docker_exec docker_stop docker_login docker_push
