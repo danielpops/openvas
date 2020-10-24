@@ -47,7 +47,7 @@ RUN ln -s /usr/bin/yarnpkg /usr/bin/yarn
 
 WORKDIR /openvas
 RUN for i in gvm-libs gvmd openvas gsa; do \
-        git clone https://github.com/greenbone/$i --depth=1; \
+        git clone --depth=1 --branch v20.8.0 https://github.com/greenbone/$i; \
         cd $i; \
         cmake .; \
         make install; \
